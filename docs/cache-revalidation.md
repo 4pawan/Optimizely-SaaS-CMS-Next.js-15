@@ -88,10 +88,16 @@ export async function POST(request: NextRequest) {
 
     const content = await fetchContentByGuid(formattedGuid)
     const urlType = content?._metadata?.url?.type
+    // In hierarchical routing, the Start Page in Optimizely does not use "/" as its URL.
+    // Instead, it has a custom path like "/start-page". We remove the OPTIMIZELY_START_PAGE_URL
+    // prefix to normalize the URL and make it relative to the site root.
     const url =
       urlType === 'SIMPLE'
         ? content?._metadata?.url?.default
-        : content?._metadata?.url?.hierarchical?.replace('/s', '')
+        : content?._metadata?.url?.hierarchical?.replace(
+            process.env.OPTIMIZELY_START_PAGE_URL ?? '',
+            ''
+          )
 
     if (!url) {
       return NextResponse.json({ message: 'Page Not Found' }, { status: 400 })
@@ -129,7 +135,15 @@ async function fetchContentByGuid(guid: string) {
 }
 
 function normalizeUrl(url: string, locale: string): string {
-  const normalizedUrl = url.startsWith('/') ? url : `/${url}`
+  // Ensure the URL starts with a slash
+  let normalizedUrl = url.startsWith('/') ? url : `/${url}`
+
+  // Remove the trailing slash, if present (e.g. "/about/" -> "/about")
+  if (normalizedUrl.endsWith('/')) {
+    normalizedUrl = normalizedUrl.slice(0, -1)
+  }
+
+  // If the URL doesn't already start with the locale (e.g. "/en"), prepend it
   return normalizedUrl.startsWith(`/${locale}`)
     ? normalizedUrl
     : `/${locale}${normalizedUrl}`
@@ -166,12 +180,22 @@ function handleError(error: unknown) {
 }
 ```
 
-This API route does the following:
+This API route handles Optimizely CMS webhooks and triggers revalidation for updated content.
 
-1. Verifies the webhook secret
+#### Key steps:
+
+1. Verifies the webhook secret for security
 2. Extracts the document ID and locale from the webhook payload
 3. Fetches the content details (url) from Optimizely using the content GUID/key
-4. Revalidates the specific path using `revalidatePath` or `revalidateTag`
+4. Normalizes the URL (removing Start Page prefix and trailing slash, and adding locale prefix)
+5. Revalidates the specific path using `revalidatePath` or `revalidateTag`
+
+#### ⚠️ Important Notes for revalidation by path:
+
+- The URL used in `revalidatePath` **must exactly match** the one used in Next.js routing.
+- This means the URL **should not include the Start Page path prefix**, which is removed using `OPTIMIZELY_START_PAGE_URL`.
+- The URL **must not end with a trailing slash** (`/`), otherwise `revalidatePath` will not work as expected.
+- Always ensure the normalized path mirrors the format used in `app/` route segments in Next.js.
 
 ### Step 2: Configure the Webhook in Optimizely
 

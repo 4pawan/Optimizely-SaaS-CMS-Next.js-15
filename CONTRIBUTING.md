@@ -42,6 +42,7 @@ This project and everyone participating in it is governed by our [Code of Conduc
 ## Setting Up the Development Environment
 
 1. Clone the repository:
+
 ```bash
 git clone https://github.com/szymonuryga/Optimizely-Masterclass.git
 cd Optimizely-Masterclass
@@ -54,7 +55,7 @@ npm install
 ```
 
 3. Set up environment variables:
-Create a `.env` file in the root directory with the necessary variables (refer to the README for details).
+   Create a `.env` file in the root directory with the necessary variables (refer to the README for details).
 
 4. Start the development server:
 
@@ -72,13 +73,11 @@ We use ESLint and Prettier to ensure consistent code style. Our configuration fi
 npm run lint
 ```
 
-
 - Run Prettier:
 
 ```shellscript
 npm run format
 ```
-
 
 Please ensure your code adheres to these standards before submitting a pull request.
 
@@ -92,7 +91,6 @@ Example commit messages:
 - `fix(api): handle error in revalidation endpoint`
 - `docs(readme): update deployment instructions`
 
-
 ## Branching Model
 
 We use a simplified Gitflow workflow:
@@ -101,8 +99,6 @@ We use a simplified Gitflow workflow:
 - `develop`: The branch where features are integrated for the next release.
 - Feature branches: Named `feature/your-feature-name`, branched off from and merged back into `develop`.
 - Hotfix branches: Named `hotfix/your-hotfix-name`, branched off from `main` and merged into both `main` and `develop`.
-
-
 
 ## Building and Deploying
 
@@ -142,7 +138,6 @@ When reporting bugs, please include:
 6. Screenshots (if applicable)
 7. Your environment (OS, browser, Node.js version, etc.)
 
-
 ## Suggesting Enhancements
 
 When suggesting enhancements, please include:
@@ -152,10 +147,8 @@ When suggesting enhancements, please include:
 3. Any potential implementation ideas you have
 4. Why this enhancement would be useful to most users
 
-
 ## Project Maintainers
 
 - [Szymon Uryga](https://github.com/szymonuryga) - Lead Developer
-
 
 Thank you for contributing to our project!

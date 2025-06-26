@@ -18,10 +18,16 @@ export async function POST(request: NextRequest) {
 
     const content = await fetchContentByGuid(formattedGuid)
     const urlType = content?._metadata?.url?.type
+    // In hierarchical routing, the Start Page in Optimizely does not use "/" as its URL.
+    // Instead, it has a custom path like "/start-page". We remove the OPTIMIZELY_START_PAGE_URL
+    // prefix to normalize the URL and make it relative to the site root.
     const url =
       urlType === 'SIMPLE'
         ? content?._metadata?.url?.default
-        : content?._metadata?.url?.hierarchical?.replace('/s', '')
+        : content?._metadata?.url?.hierarchical?.replace(
+            process.env.OPTIMIZELY_START_PAGE_URL ?? '',
+            ''
+          )
 
     if (!url) {
       return NextResponse.json({ message: 'Page Not Found' }, { status: 400 })
@@ -59,7 +65,15 @@ async function fetchContentByGuid(guid: string) {
 }
 
 function normalizeUrl(url: string, locale: string): string {
-  const normalizedUrl = url.startsWith('/') ? url : `/${url}`
+  // Ensure the URL starts with a slash
+  let normalizedUrl = url.startsWith('/') ? url : `/${url}`
+
+  // Remove the trailing slash, if present (e.g. "/about/" -> "/about")
+  if (normalizedUrl.endsWith('/')) {
+    normalizedUrl = normalizedUrl.slice(0, -1)
+  }
+
+  // If the URL doesn't already start with the locale (e.g. "/en"), prepend it
   return normalizedUrl.startsWith(`/${locale}`)
     ? normalizedUrl
     : `/${locale}${normalizedUrl}`

@@ -4,7 +4,7 @@ A comprehensive starter template for building modern websites with Optimizely Sa
 
 This project was built based on a free course on how to get started with Optimizely SaaS CMS. You can find step-by-step information on how this project was built at: https://opti-masterclass.vercel.app
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fszymonuryga%2FOptimizely-SaaS-CMS-Next.js-15&env=OPTIMIZELY_API_URL,OPTIMIZELY_SINGLE_KEY,OPTIMIZELY_PREVIEW_SECRET,OPTIMIZELY_REVALIDATE_SECRET,NEXT_PUBLIC_CMS_URL)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fszymonuryga%2FOptimizely-SaaS-CMS-Next.js-15&env=OPTIMIZELY_API_URL,OPTIMIZELY_SINGLE_KEY,OPTIMIZELY_PREVIEW_SECRET,OPTIMIZELY_REVALIDATE_SECRET,OPTIMIZELY_START_PAGE_URL,NEXT_PUBLIC_CMS_URL)
 
 > Note: This template requires an Optimizely SaaS CMS instance to retrieve content. Please connect with the [Optimizely](https://www.optimizely.com/products/content-management/) team to receive CMS access.
 
@@ -59,6 +59,7 @@ OPTIMIZELY_API_URL="https://cg.optimizely.com/content/v2"
 OPTIMIZELY_SINGLE_KEY=""
 OPTIMIZELY_PREVIEW_SECRET=""
 OPTIMIZELY_REVALIDATE_SECRET=""
+OPTIMIZELY_START_PAGE_URL=""
 NEXT_PUBLIC_CMS_URL="https://app-{your-data}.cms.optimizely.com"
 ```
 
@@ -104,6 +105,7 @@ This project includes comprehensive documentation on various aspects of integrat
 - `OPTIMIZELY_SINGLE_KEY`: Your Optimizely Content Graph API key
 - `OPTIMIZELY_PREVIEW_SECRET`: Generated base64 string based on your AppKey and AppSecret credentials. For more details I recommend you to take a look at Kunal's article: https://kunalshetye.com/posts/optimizely-graph-using-appkey-appsecret/
 - `OPTIMIZELY_REVALIDATE_SECRET`: A secret key used for revalidating cached content
+- `OPTIMIZELY_START_PAGE_URL`: Defines the full route URL of the Start Page in Optimizely CMS. When using hierarchical routing, Optimizely does not assign the root path `/` to the Start Page by default. Instead, the Start Page must have an explicit URL like "/start-page". This impacts the overall routing logic and cache revalidation mechanisms. Therefore, this variable must be set manually to indicate the correct URL of the Start Page.
 - `NEXT_PUBLIC_CMS_URL`: The URL of your SaaS CMS instance
 
 ## Future Enhancements
