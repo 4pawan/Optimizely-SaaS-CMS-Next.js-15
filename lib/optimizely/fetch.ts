@@ -60,6 +60,23 @@ const optimizelyFetch = async <Response, Variables = object>({
 
     const result = await response.json()
 
+    console.log('➡️GraphQL Request:', {
+      query,
+      variables,
+    })
+
+    if (result.errors) {
+      console.error('❌GraphQL Errors:', JSON.stringify(result.errors, null, 2))
+    }
+
+    if (result.data) {
+      console.log('✅GraphQL Response:', JSON.stringify(result.data, null, 2))
+    }
+
+    // if (result.extensions) {
+    //   console.log('ℹ️ GraphQL Extensions:', JSON.stringify(result.extensions, null, 2))
+    // }
+
     return {
       ...result,
       headers: response.headers,
